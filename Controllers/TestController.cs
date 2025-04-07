@@ -1,14 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebApplicationStudy.Controllers
+public class TestController : BaseController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TestController : ControllerBase
-    {
-        // app.MapGet("/test", () => "Hello world!");
-        [HttpGet("test")]
-        public string GetHelloWorldText() => "Hello world!";
-    }
+    // app.MapGet("/test", () => "Hello world!");
+    [HttpGet("test")]
+    public string GetHelloWorldText() => "Hello world!";
 }
