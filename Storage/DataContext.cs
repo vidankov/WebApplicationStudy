@@ -1,4 +1,9 @@
-﻿public static class DataContext
+﻿public class DataContext
 {
-    public static string Str;
+    public DataContext()
+    {
+        Info = "default value";
+    }
+
+    public string Info { get; set; }
 }

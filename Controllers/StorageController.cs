@@ -2,15 +2,22 @@
 
 public class StorageController : BaseController
 {
+    private DataContext _dataContext;
+
+    public StorageController(DataContext dataContext)
+    {
+        _dataContext = dataContext;
+    }
+
     [HttpGet("SetString/{value}")]
     public void SetString(string value)
     {
-        DataContext.Str = value;
+        _dataContext.Info = value;
     }
 
     [HttpGet("GetString")]
     public string GetString()
     {
-        return DataContext.Str;
+        return _dataContext.Info;
     }
 }
