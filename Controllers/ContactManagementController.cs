@@ -20,4 +20,10 @@ public class ContactManagementController : BaseController
     {
         return _storage.Contacts;
     }
+
+    [HttpDelete("contacts/{id}")]
+    public void Delete(int id) 
+    {
+        _storage.Contacts.Remove(_storage.Contacts.First(c => c.Id == id));
+    }
 }
