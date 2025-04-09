@@ -6,18 +6,14 @@ public class ContactStorage
 
     public ContactStorage()
     {
-        Contacts = [];
-
         int ids = 1;
-        var faker = new Faker<Contact>("ru")
-            .RuleFor(c => c.Id, f => ids++)
-            .RuleFor(c => c.Name, f => f.Name.FullName())
-            .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber("7-###-###-####"))
-            .RuleFor(c => c.Email, f => f.Internet.Email());
 
-        for (int i = 0; i < 5; i++)
-        {
-            Contacts.Add(faker.Generate());
-        }
+        Contacts = new Faker<Contact>("ru")
+            .RuleFor(c => c.Id, f => ids++)
+            .RuleFor(c => c.FirstName, f => f.Name.FirstName())
+            .RuleFor(c => c.LastName, f => f.Name.LastName())
+            .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber("7-###-###-####"))
+            .RuleFor(c => c.Email, (f, t) => f.Internet.Email(t.FirstName, t.LastName))
+            .Generate(5);
     }
 }
