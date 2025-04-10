@@ -44,4 +44,22 @@ public class ContactManagementController : BaseController
     {
         return Ok(_storage.Contacts);
     }
+
+    [HttpGet("contacts/{id}")]
+    public ActionResult<Contact> GetContact(string idString)
+    {
+        if (!int.TryParse(idString, out int id))
+        {
+            return BadRequest("ID должен быть целым числом");
+        }
+        
+        var contact = _storage.GetContactById(id);
+        
+        if (contact is null)
+        {
+            return NotFound("Контакт с указанным ID не найдено");
+        }
+
+        return Ok(contact);
+    }
 }

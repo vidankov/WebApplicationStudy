@@ -4,7 +4,7 @@ public class ContactStorage
 {
     private List<Contact> _contacts = [];
 
-    public List<Contact> Contacts { get { return _contacts; } }
+    public List<Contact> Contacts => _contacts;
 
     public int MaxSize { get; }
 
@@ -20,6 +20,8 @@ public class ContactStorage
             .Generate(5);
     }
 
+    public Contact? GetContactById(int id) => _contacts.FirstOrDefault(c => c.Id == id);
+
     public bool Add(ContactDto contactDto, out Contact contact)
     {
         contact = new();
@@ -28,20 +30,20 @@ public class ContactStorage
         {
             return false;
         }
-        
+
         contact.FirstName = contactDto.FirstName;
         contact.LastName = contactDto.LastName;
         contact.Phone = contactDto.Phone;
         contact.Email = contactDto.Email;
-        
+
         _contacts.Add(contact);
-        
+
         return true;
     }
 
     public bool Remove(int id)
     {
-        var contact = _contacts.FirstOrDefault(c => c.Id == id);
+        var contact = GetContactById(id);
         if (contact is not null)
         {
             _contacts.Remove(contact);
@@ -52,7 +54,7 @@ public class ContactStorage
 
     public bool Update(int id, ContactDto contactDto)
     {
-        var contact = _contacts.FirstOrDefault(c => c.Id == id);
+        var contact = GetContactById(id);
         if (contact is not null)
         {
             contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;
