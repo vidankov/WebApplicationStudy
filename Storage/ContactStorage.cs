@@ -52,9 +52,9 @@ public class ContactStorage
         return false;
     }
 
-    public bool Update(int id, ContactDto contactDto)
+    public bool Update(int id, ContactDto contactDto, out Contact? contact)
     {
-        var contact = GetContactById(id);
+        contact = GetContactById(id);
         if (contact is not null)
         {
             contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;

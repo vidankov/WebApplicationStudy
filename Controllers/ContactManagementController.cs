@@ -32,9 +32,9 @@ public class ContactManagementController : BaseController
     [HttpPut("contacts/{id}")]
     public IActionResult Update(int id, ContactDto contactDto)
     {
-        if (_storage.Update(id, contactDto))
+        if (_storage.Update(id, contactDto, out Contact? contact))
         {
-            return Ok();
+            return Ok(contact);
         }
         return Conflict("Контакт с указанным ID не найден");
     }
