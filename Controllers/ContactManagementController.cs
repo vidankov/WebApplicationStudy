@@ -10,26 +10,38 @@ public class ContactManagementController : BaseController
     }
 
     [HttpPost("contacts")]
-    public void Create([FromBody] ContactDto contactDto)
+    public IActionResult Create([FromBody] ContactDto contactDto)
     {
-        _storage.Add(contactDto);
+        if (_storage.Add(contactDto, out Contact contact))
+        {
+            return Created();
+        }
+        return Conflict("Превышено максимальное количество контактов");
     }
 
     [HttpDelete("contacts/{id}")]
-    public void Delete(int id) 
+    public IActionResult Delete(int id) 
     {
-        _storage.Remove(id);
+        if (_storage.Remove(id))
+        {
+            return NoContent();
+        }
+        return BadRequest("Контакт с указанным ID не найдено");
     }
 
     [HttpPut("contacts/{id}")]
-    public void Update(int id, ContactDto contactDto)
+    public IActionResult Update(int id, ContactDto contactDto)
     {
-        _storage.Update(id, contactDto);
+        if (_storage.Update(id, contactDto))
+        {
+            return Ok();
+        }
+        return Conflict("Контакт с указанным ID не найдено");
     }
 
     [HttpGet("contacts")]
-    public List<Contact> GetAllContacts()
+    public ActionResult<List<Contact>> GetAllContacts()
     {
-        return _storage.Contacts;
+        return Ok(_storage.Contacts);
     }
 }

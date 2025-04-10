@@ -6,8 +6,12 @@ public class ContactStorage
 
     public List<Contact> Contacts { get { return _contacts; } }
 
-    public ContactStorage()
+    public int MaxSize { get; }
+
+    public ContactStorage(int maxSize)
     {
+        MaxSize = maxSize;
+
         _contacts = new Faker<Contact>("ru")
             .RuleFor(c => c.FirstName, f => f.Name.FirstName())
             .RuleFor(c => c.LastName, f => f.Name.LastName())
@@ -16,28 +20,48 @@ public class ContactStorage
             .Generate(5);
     }
 
-    public void Add(ContactDto contactDto)
+    public bool Add(ContactDto contactDto, out Contact contact)
     {
-        Contact contact = new();
+        contact = new();
+
+        if (Contacts.Count == MaxSize)
+        {
+            return false;
+        }
+        
         contact.FirstName = contactDto.FirstName;
         contact.LastName = contactDto.LastName;
         contact.Phone = contactDto.Phone;
         contact.Email = contactDto.Email;
+        
         _contacts.Add(contact);
+        
+        return true;
     }
 
-    public void Remove(int id)
+    public bool Remove(int id)
     {
-        _contacts.Remove(_contacts.First(c => c.Id == id));
+        var contact = _contacts.FirstOrDefault(c => c.Id == id);
+        if (contact is not null)
+        {
+            _contacts.Remove(contact);
+            return true;
+        }
+        return false;
     }
 
-    public void Update(int id, ContactDto contactDto)
+    public bool Update(int id, ContactDto contactDto)
     {
-        var contact = _contacts.First(c => c.Id == id);
-        contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;
-        contact.Phone = ValidateNewValue(contactDto.Phone) ? contactDto.Phone : contact.Phone;
-        contact.FirstName = ValidateNewValue(contactDto.FirstName) ? contactDto.FirstName : contact.FirstName;
-        contact.LastName = ValidateNewValue(contactDto.LastName) ? contactDto.LastName : contact.LastName;
+        var contact = _contacts.FirstOrDefault(c => c.Id == id);
+        if (contact is not null)
+        {
+            contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;
+            contact.Phone = ValidateNewValue(contactDto.Phone) ? contactDto.Phone : contact.Phone;
+            contact.FirstName = ValidateNewValue(contactDto.FirstName) ? contactDto.FirstName : contact.FirstName;
+            contact.LastName = ValidateNewValue(contactDto.LastName) ? contactDto.LastName : contact.LastName;
+            return true;
+        }
+        return false;
     }
 
     protected bool ValidateNewValue(string? value)
