@@ -26,7 +26,7 @@ public class ContactManagementController : BaseController
         {
             return NoContent();
         }
-        return BadRequest("Контакт с указанным ID не найдено");
+        return BadRequest("Контакт с указанным ID не найден");
     }
 
     [HttpPut("contacts/{id}")]
@@ -36,7 +36,7 @@ public class ContactManagementController : BaseController
         {
             return Ok();
         }
-        return Conflict("Контакт с указанным ID не найдено");
+        return Conflict("Контакт с указанным ID не найден");
     }
 
     [HttpGet("contacts")]
@@ -45,7 +45,7 @@ public class ContactManagementController : BaseController
         return Ok(_storage.Contacts);
     }
 
-    [HttpGet("contacts/{id}")]
+    [HttpGet("contacts/{idString}")]
     public ActionResult<Contact> GetContact(string idString)
     {
         if (!int.TryParse(idString, out int id))
@@ -57,7 +57,7 @@ public class ContactManagementController : BaseController
         
         if (contact is null)
         {
-            return NotFound("Контакт с указанным ID не найдено");
+            return NotFound("Контакт с указанным ID не найден");
         }
 
         return Ok(contact);
