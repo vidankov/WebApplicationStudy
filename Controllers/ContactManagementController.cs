@@ -14,7 +14,7 @@ public class ContactManagementController : BaseController
     {
         if (_storage.Add(contactDto, out Contact contact))
         {
-            return Created();
+            return Created($"api/ContactManagement/contacts/{contact.Id}", contact);
         }
         return Conflict("Превышено максимальное количество контактов");
     }
