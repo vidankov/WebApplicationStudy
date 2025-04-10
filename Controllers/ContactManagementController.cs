@@ -10,39 +10,26 @@ public class ContactManagementController : BaseController
     }
 
     [HttpPost("contacts")]
-    public void Create([FromBody] Contact contact)
+    public void Create([FromBody] ContactDto contactDto)
     {
-        _storage.Contacts.Add(contact);
+        _storage.Add(contactDto);
     }
 
     [HttpDelete("contacts/{id}")]
     public void Delete(int id) 
     {
-        _storage.Contacts.Remove(_storage.Contacts.First(c => c.Id == id));
+        _storage.Remove(id);
     }
 
     [HttpPut("contacts/{id}")]
     public void Update(int id, ContactDto contactDto)
     {
-        var contact = _storage.Contacts.First(c => c.Id == id);
-        contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;
-        contact.Phone = ValidateNewValue(contactDto.Phone) ? contactDto.Phone : contact.Phone;
-        contact.FirstName = ValidateNewValue(contactDto.FirstName) ? contactDto.FirstName : contact.FirstName;
-        contact.LastName = ValidateNewValue(contactDto.LastName) ? contactDto.LastName : contact.LastName;
+        _storage.Update(id, contactDto);
     }
 
     [HttpGet("contacts")]
-    public List<Contact> GetContacts()
+    public List<Contact> GetAllContacts()
     {
         return _storage.Contacts;
-    }
-
-    protected bool ValidateNewValue(string? value)
-    {
-        if (string.IsNullOrEmpty(value) || value == "string")
-        {
-            return false;
-        }
-        return true;
     }
 }
