@@ -2,9 +2,9 @@
 
 public class ContactManagementController : BaseController
 {
-    private readonly ContactStorage _storage;
+    private readonly IStorage _storage;
 
-    public ContactManagementController(ContactStorage storage)
+    public ContactManagementController(IStorage storage)
     {
         _storage = storage;
     }

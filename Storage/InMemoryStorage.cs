@@ -1,6 +1,6 @@
 ﻿using Bogus;
 
-public class ContactStorage
+public class InMemoryStorage : IStorage
 {
     private List<Contact> _contacts = [];
 
@@ -8,7 +8,7 @@ public class ContactStorage
 
     public int MaxSize { get; }
 
-    public ContactStorage(int maxSize)
+    public InMemoryStorage(int maxSize)
     {
         MaxSize = maxSize;
 
