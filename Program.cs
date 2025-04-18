@@ -10,7 +10,6 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<DataContext>();
 builder.Services.AddSingleton<ContactStorage>(p => new ContactStorage(10));
 
 var app = builder.Build();
