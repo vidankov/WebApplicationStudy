@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<IStorage, InMemoryStorage>(p => new InMemoryStorage(10));
+builder.Services.AddSingleton<IStorage, SqliteStorage>(); // p => new InMemoryStorage(10)
 
 var app = builder.Build();
 

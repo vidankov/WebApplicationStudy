@@ -24,7 +24,7 @@ public class InMemoryStorage : IStorage
 
     public bool Add(ContactDto contactDto, out Contact contact)
     {
-        contact = new();
+        contact = new(1);
 
         if (Contacts.Count == MaxSize)
         {
