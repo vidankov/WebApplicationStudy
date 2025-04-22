@@ -43,11 +43,18 @@ public class SqliteStorage : IStorage
         contact = new(1);
 
         var command = connection.CreateCommand();
+
         var sqlQuerry = new StringBuilder()
             .Append("INSERT INTO contacts(first_name, last_name, phone_number, email)\n")
-            .Append($"VALUES ('{contactDto.FirstName}', '{contactDto.LastName}', '{contactDto.Phone}', '{contactDto.Email}')")
+            .Append($"VALUES (@firstName, @lastName, @phone, @email)")
             .ToString();
+        
         command.CommandText = sqlQuerry;
+
+        command.Parameters.AddWithValue("@firstName", contactDto.FirstName);
+        command.Parameters.AddWithValue("@lastName", contactDto.LastName);
+        command.Parameters.AddWithValue("@phone", contactDto.Phone);
+        command.Parameters.AddWithValue("email", contactDto.Email);
 
         return command.ExecuteNonQuery() == 1;
     }
