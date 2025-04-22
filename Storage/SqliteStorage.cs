@@ -4,7 +4,12 @@ using System.Text;
 
 public class SqliteStorage : IStorage
 {
-    string connectionString = "Data Source=contacts.db";
+    private readonly string? connectionString;
+
+    public SqliteStorage(string? connectionString)
+    {
+        this.connectionString = connectionString;
+    }
 
     public List<Contact> Contacts
     {
