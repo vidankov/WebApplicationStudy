@@ -11,7 +11,7 @@ public class SqliteStorage : IStorage
         get
         {
             List<Contact> contacts = new();
-            
+
             using var connection = new SqliteConnection(connectionString);
             connection.Open();
 
@@ -40,21 +40,21 @@ public class SqliteStorage : IStorage
         using var connection = new SqliteConnection(connectionString);
         connection.Open();
 
-        contact = new(1);
-
         var command = connection.CreateCommand();
 
         var sqlQuerry = new StringBuilder()
             .Append("INSERT INTO contacts(first_name, last_name, phone_number, email)\n")
             .Append($"VALUES (@firstName, @lastName, @phone, @email)")
             .ToString();
-        
+
         command.CommandText = sqlQuerry;
 
         command.Parameters.AddWithValue("@firstName", contactDto.FirstName);
         command.Parameters.AddWithValue("@lastName", contactDto.LastName);
         command.Parameters.AddWithValue("@phone", contactDto.Phone);
-        command.Parameters.AddWithValue("email", contactDto.Email);
+        command.Parameters.AddWithValue("@email", contactDto.Email);
+
+        contact = new(1);
 
         return command.ExecuteNonQuery() == 1;
     }
@@ -80,6 +80,46 @@ public class SqliteStorage : IStorage
 
     public bool Update(int id, ContactDto contactDto, out Contact? contact)
     {
-        throw new NotImplementedException();
+        using var connection = new SqliteConnection(connectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+
+        var sqlQuerry = new StringBuilder()
+            .Append("UPDATE contacts SET ")
+            .Append($"first_name = @firstName, ")
+            .Append($"last_name = @lastName, ")
+            .Append($"phone_number = @phone, ")
+            .Append($"email = @email ")
+            .Append("WHERE id = @id;")
+            .ToString();
+
+        command.CommandText = sqlQuerry;
+
+        command.Parameters.AddWithValue("@id", id);
+        command.Parameters.AddWithValue("@firstName", contactDto.FirstName);
+        command.Parameters.AddWithValue("@lastName", contactDto.LastName);
+        command.Parameters.AddWithValue("@phone", contactDto.Phone);
+        command.Parameters.AddWithValue("@email", contactDto.Email);
+
+        /*
+            contact.Email = ValidateNewValue(contactDto.Email) ? contactDto.Email : contact.Email;
+            contact.Phone = ValidateNewValue(contactDto.Phone) ? contactDto.Phone : contact.Phone;
+            contact.FirstName = ValidateNewValue(contactDto.FirstName) ? contactDto.FirstName : contact.FirstName;
+            contact.LastName = ValidateNewValue(contactDto.LastName) ? contactDto.LastName : contact.LastName;
+         */
+
+        contact = new(1);
+
+        return command.ExecuteNonQuery() == 1;
+    }
+
+    protected bool ValidateNewValue(string? value)
+    {
+        if (string.IsNullOrEmpty(value) || value == "string")
+        {
+            return false;
+        }
+        return true;
     }
 }
