@@ -4,6 +4,8 @@ builder.Services.AddServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
+app.Services.AddCustomService(builder.Configuration);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -33,7 +33,7 @@ public class FakerInitializer : IInitializer
 
         if (count == 0)
         {
-            var contacts = new Faker<Contact>("ru")
+            var contacts = new Faker<ContactDto>("ru")
             .RuleFor(c => c.FirstName, f => f.Name.FirstName())
             .RuleFor(c => c.LastName, f => f.Name.LastName())
             .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber("7-###-###-####"))
