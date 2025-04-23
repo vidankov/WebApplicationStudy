@@ -59,14 +59,40 @@ public class SqliteStorage : IStorage
         command.Parameters.AddWithValue("@phone", contactDto.Phone);
         command.Parameters.AddWithValue("@email", contactDto.Email);
 
-        contact = new(1);
+        bool isSuccessful = command.ExecuteNonQuery() == 1;
 
-        return command.ExecuteNonQuery() == 1;
+        command.CommandText = "SELECT MAX(id) FROM contacts;";
+
+        long latestId = (long)command.ExecuteScalar();
+        contact = GetContactById((int)latestId);
+
+        return isSuccessful;
     }
 
     public Contact? GetContactById(int id)
     {
-        throw new NotImplementedException();
+        using var connection = new SqliteConnection(connectionString);
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = $"SELECT * FROM contacts WHERE id = {id};";
+
+        using var reader = command.ExecuteReader();
+
+        if (!reader.Read()) 
+        {
+            return null;
+        }
+
+        var contact = new Contact(reader.GetInt32(0))
+        {
+            FirstName = reader.GetString(1),
+            LastName = reader.GetString(2),
+            Phone = reader.GetString(3),
+            Email = reader.GetString(4)
+        };
+
+        return contact;
     }
 
     public bool Remove(int id)
@@ -114,9 +140,14 @@ public class SqliteStorage : IStorage
             contact.LastName = ValidateNewValue(contactDto.LastName) ? contactDto.LastName : contact.LastName;
          */
 
-        contact = new(1);
+        bool isSuccessful = command.ExecuteNonQuery() == 1;
 
-        return command.ExecuteNonQuery() == 1;
+        command.CommandText = "SELECT MAX(id) FROM contacts;";
+
+        long latestId = (long)command.ExecuteScalar();
+        contact = GetContactById((int)latestId);
+
+        return isSuccessful;
     }
 
     protected bool ValidateNewValue(string? value)
