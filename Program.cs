@@ -1,17 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// добавляет сервис, который генерирует описание API на основе ваших контроллеров и эндпоинтов
-builder.Services.AddEndpointsApiExplorer();
-// добавляет генератор Swagger, который создает спецификацию OpenAPI.
-builder.Services.AddSwaggerGen();
-
-// Add services to the container.
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
-
-var connectionString = builder.Configuration.GetConnectionString("SqliteStringConnection");
-builder.Services.AddSingleton<IStorage>(new SqliteStorage(connectionString)); // p => new InMemoryStorage(10)
+builder.Services.AddServiceCollection(builder.Configuration);
 
 var app = builder.Build();
 
