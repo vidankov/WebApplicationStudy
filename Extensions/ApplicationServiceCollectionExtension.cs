@@ -1,4 +1,6 @@
-﻿public static class ApplicationServiceCollectionExtension
+﻿using Microsoft.EntityFrameworkCore;
+
+public static class ApplicationServiceCollectionExtension
 {
     public static IServiceCollection AddServiceCollection(
         this IServiceCollection services, ConfigurationManager configuration)
@@ -14,7 +16,8 @@
         services.AddOpenApi();
 
         var connectionString = configuration.GetConnectionString("SqliteStringConnection");
-        services.AddSingleton<IStorage>(new SqliteStorage(connectionString)); // p => new InMemoryStorage(10)
+        services.AddDbContext<SqliteDbContext>(opt => opt.UseSqlite(connectionString));
+        services.AddScoped<IStorage, SqliteEfStorage>();
 
         return services;
     }
