@@ -55,4 +55,14 @@ public class SqliteEfStorage : IStorage
         _context.SaveChanges();
         return true;
     }
+
+    public (List<Contact>, int TotalCount) GetContacts(int pageNumber, int pageSize)
+    {
+        int total = _context.Contacts.Count();
+        List<Contact> contacts = _context.Contacts
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+        return (contacts, total);
+    }
 }

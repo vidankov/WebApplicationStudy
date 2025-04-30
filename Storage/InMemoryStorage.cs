@@ -74,4 +74,9 @@ public class InMemoryStorage : IStorage
         }
         return true;
     }
+
+    public (List<Contact>, int TotalCount) GetContacts(int pageNumber, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
 }

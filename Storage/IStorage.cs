@@ -2,6 +2,8 @@
 {
     List<Contact> Contacts { get; }
 
+    (List<Contact>, int TotalCount) GetContacts(int pageNumber, int pageSize);
+
     Contact? GetContactById(int id);
     
     bool Add(ContactDto contactDto, out Contact contact);

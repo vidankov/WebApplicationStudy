@@ -95,6 +95,11 @@ public class SqliteStorage : IStorage
         return contact;
     }
 
+    public (List<Contact>, int TotalCount) GetContacts(int pageNumber, int pageSize)
+    {
+        throw new NotImplementedException();
+    }
+
     public bool Remove(int id)
     {
         using var connection = new SqliteConnection(connectionString);

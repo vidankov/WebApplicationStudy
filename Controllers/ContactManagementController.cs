@@ -20,7 +20,7 @@ public class ContactManagementController : BaseController
     }
 
     [HttpDelete("contacts/{id}")]
-    public IActionResult Delete(int id) 
+    public IActionResult Delete(int id)
     {
         if (_storage.Remove(id))
         {
@@ -52,14 +52,30 @@ public class ContactManagementController : BaseController
         {
             return BadRequest("ID должен быть целым числом");
         }
-        
+
         var contact = _storage.GetContactById(id);
-        
+
         if (contact is null)
         {
             return NotFound("Контакт с указанным ID не найден");
         }
 
         return Ok(contact);
+    }
+
+    [HttpGet("contacts/page")]
+    public IActionResult GetContacts(int pageNumber = 1, int pageSize = 5)
+    {
+        var (contacts, total) = _storage.GetContacts(pageNumber, pageSize);
+
+        var response = new
+        {
+            Contacts = contacts,
+            Total = total,
+            CurrentPage = pageNumber,
+            PageSize = pageSize
+        };
+
+        return Ok(response);
     }
 }
